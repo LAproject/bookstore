@@ -1,4 +1,4 @@
-
+package bookstore;
 import java.awt.BorderLayout;
 import java.awt.CardLayout;
 import java.awt.Color;
@@ -33,16 +33,17 @@ import javax.swing.JTextField;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 
-	public class Demo extends JFrame implements ActionListener {
+	public class Demo extends JFrame {
 		
 	    static JFrame frame;
-	    static JButton register, login, exit, next;
+	    static JButton quit, register, login, exit, next;
 	    static JPanel panel, mainPanel, customerPanel, adminPanel, cardDisplay;
 	    
 	    static boolean isAdmin = true;
 	    ResultSet rs;
-	    String user, pass;
-	    Connection con = null;
+	    static String user;
+		static String pass;
+	    static Connection con = null;
 	    static Container mainContainer; 
 	 
 	    public Demo() throws IOException 
@@ -70,39 +71,8 @@ import javax.swing.UnsupportedLookAndFeelException;
 			setSize(500,500);
 			setLocation(250,150);
 	    }
-	     
-	    
-
-		@Override
-		public void actionPerformed(ActionEvent e) {
-	    	if (e.getActionCommand().equals("Next")){
-	    		CardLayout card = (CardLayout)cardDisplay.getLayout();
-	    		card.next(cardDisplay);
-	    	}
-			if (e.getActionCommand().equals("REGISTER")){
-	    		registerPane();
-	    	}
-	    	if (e.getActionCommand().equals("LOGIN")){
-	    		loginPane();
-	    	}
-	    	if (e.getActionCommand().equals("EXIT")){
-    			System.exit(0);
-    		}
-	    	if (e.getActionCommand().equals("Quit")){
-	    		
-	    		mainContainer.removeAll();
-				try {
-					mainContainer.add(mainPanel());
-				} catch (IOException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				}
-				frame.validate();
-    		}
-		}
-	    
-	    
-	    public JOptionPane registerPane () {
+	   
+	    public static JOptionPane registerPane () {
 	    	   
   	      JTextField userField = new JTextField(15);
   	      JTextField passField = new JTextField(15);
@@ -124,11 +94,11 @@ import javax.swing.UnsupportedLookAndFeelException;
   	         
   	          try {
 					if(register(user,pass)){
-						JOptionPane.showMessageDialog(this, "Registered, Please login now. ");
+						JOptionPane.showMessageDialog(mainPanel, "Registered, Please login now. ");
 						
 					}
 					else{
-						JOptionPane.showMessageDialog(this, "Please try again. ");
+						JOptionPane.showMessageDialog(mainPanel, "Please try again. ");
 					}
 					
 				} catch (SQLException e) {
@@ -139,7 +109,7 @@ import javax.swing.UnsupportedLookAndFeelException;
 			return null;
   	}
 	    
-	    public boolean register(String userName, String password) throws SQLException {
+	    public static boolean register(String userName, String password) throws SQLException {
     		try{
 	    		if ((userName != null)&&(password !=null)) {
 	    			
@@ -164,7 +134,7 @@ import javax.swing.UnsupportedLookAndFeelException;
 			return false; //the name was not found
 		}
 	    
-	    public JOptionPane loginPane () {
+	    public static JOptionPane loginPane () throws IOException {
     	   
     	      JTextField userField = new JTextField(15);
     	      JTextField passField = new JTextField(15);
@@ -194,7 +164,7 @@ import javax.swing.UnsupportedLookAndFeelException;
 			return null;
     	}
     	
-    	public boolean checkLogin(String userName, String password) throws SQLException {
+    	public static boolean checkLogin(String userName, String password) throws SQLException {
     		try{
 	    		if (userName != null) {
 	    			
@@ -227,25 +197,26 @@ import javax.swing.UnsupportedLookAndFeelException;
 			return false; //the name was not found
 		}
     	
-    	private void loginDbCheck(String uss, String paw) throws SQLException {
+    	private static void loginDbCheck(String uss, String paw) throws SQLException, IOException {
 	    	if(checkLogin(uss,paw)) {
 				if(isAdmin){
 					mainContainer.removeAll();
-					mainContainer.add(adminPanel(uss));
+					mainContainer.add(AdminPanel.adminPanel(uss,null));
 					frame.validate();
 				}
 				else{
 					mainContainer.removeAll();
-					mainContainer.add(customerPanel(uss));
+					//mainContainer.add(customerPanel(uss));
+					mainContainer.add(CustomerPanel.customerPanel(uss, null));
 					frame.validate();
 				}
 			}
 			else {
-				JOptionPane.showMessageDialog(this, "Incorrect Details, Please Try Again");
+				JOptionPane.showMessageDialog(mainPanel, "Incorrect Details, Please Try Again");
 			}
 	    }
 	    
-    	public JPanel mainPanel() throws IOException{
+    	public static JPanel mainPanel() throws IOException{
     		
     		isAdmin = true;
     		JPanel header = new JPanel();
@@ -262,9 +233,34 @@ import javax.swing.UnsupportedLookAndFeelException;
 			login = new JButton("LOGIN");
 			exit = new JButton("EXIT");
 			register = new JButton("REGISTER");
-			login.addActionListener(this);	
-			register.addActionListener(this);
-			exit.addActionListener(this);
+			
+			
+			login.addActionListener(new ActionListener() {
+	            @Override
+	            public void actionPerformed(ActionEvent e) {
+	            	try {
+						loginPane();
+					} catch (IOException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
+	            	
+	            }});	
+			
+			
+			
+			register.addActionListener(new ActionListener() {
+	            @Override
+	            public void actionPerformed(ActionEvent e) {
+	            	registerPane();
+	            	
+	            }});	
+			exit.addActionListener(new ActionListener() {
+	            @Override
+	            public void actionPerformed(ActionEvent e) {
+	            	System.exit(0);
+	            	
+	            }});	
 			
 			
 			buttonsPanel.add(login);
@@ -280,96 +276,8 @@ import javax.swing.UnsupportedLookAndFeelException;
 			return mainPanel;
     		
     	}
-	    
-    	public JPanel customerPanel(String uss) { {
-    		
-    		JButton quit = new JButton("Quit");
-	        JButton next = new JButton("Next");
-	        customerPanel = new JPanel();
-	        customerPanel.setLayout(new BoxLayout(customerPanel, BoxLayout.Y_AXIS));
-    		customerPanel.add(quit);
-    		customerPanel.add(new JLabel("Welcome " + uss + " to your customer panel \n"));
-    		cardDisplay = new JPanel();
-    		cardDisplay.setLayout(new CardLayout());
-    		
-    		
-    		try {
-    			
-    			
-				Class.forName("com.mysql.jdbc.Driver");				
-			   con = DriverManager.getConnection ("jdbc:mysql://127.0.0.1:3306/bookstore","root","Password1");
-			   Statement stmt = con.createStatement();
-			   rs = stmt.executeQuery("select idstock, bookname, author, description, price, image, qty from stock");
-			   String[] arr = null;
-	            while (rs.next()) {
-	               String em = rs.getString("bookname");
-	               arr = em.split("\n");
-	               for (int i =0; i < arr.length; i++){
-	            	   JPanel card = new JPanel();
-	            	   card.setLayout(new BoxLayout(card, BoxLayout.Y_AXIS));
-	            	   card.setName(String.valueOf(i));
-	            	   
-	    			   String bookName = "BOOK NAME IS: " + rs.getString("bookname");
-	    			   String author = "AUTHOR OF THIS BOOK: "+ rs.getString("author");
-	    			   String price = "PRICE FOR THIS BOOK: " + rs.getString("price");
-	    			   String description = "SHORT DESCRIPTION: " + rs.getString("description");
-	    			   String qty1 = "AVAILABLE QUANTITY " +  rs.getString("qty");
-	    			   int qtty = rs.getInt("qty");
-	    			   String bookN = rs.getString("bookname");
-	    			   JButton customerOrder = new JButton("Order");
-	    			   customerOrder.addActionListener(new ActionListener() {
-	    		            @Override
-	    		            public void actionPerformed(ActionEvent e) {
-		    		            if(qtty>0){	
-		    		                try {
-										if (orderThis(bookN, uss, qtty) && reduceQtty(qtty, bookN)) {
-											
-											mainContainer.removeAll();
-											mainContainer.add(customerPanel(uss));
-											frame.validate();
-											JOptionPane.showMessageDialog(card, "Congratulations " + uss + " your order for " + bookN+ " was placed succesfuly");
-																						
-										} else {
-											JOptionPane.showMessageDialog(card, "There was a problem with order, Please contact shop");
-										}
-									} catch (HeadlessException e1) {
-										// TODO Auto-generated catch block
-										e1.printStackTrace();
-									} catch (SQLException e1) {
-										// TODO Auto-generated catch block
-										e1.printStackTrace();
-									}
-		    		            }    
-	    		            }
-
-							
-	    		        });
-	    			   
-	    			   card.add(new JLabel(bookName));
-	    			   card.add(new JLabel(author));
-	    			   card.add(new JLabel(description));
-	    			   card.add(new JLabel(price));
-	    			   card.add(new JLabel(qty1));
-	    			   card.add(customerOrder);
-	    			   
-	    			   cardDisplay.add(card);
-	            	}
-	            }
-    		} catch (ClassNotFoundException | SQLException e) {
-			
-			e.printStackTrace();
-		}
-    		quit.addActionListener(this);
-	        next.addActionListener(this);
-	        
-	        
-	        customerPanel.add(cardDisplay);
-	        customerPanel.add(next);
-	      }
-	   	return customerPanel; 
-	   }
-    	
-    	private boolean orderThis(String bookN, String uss, int qtty) throws SQLException {
+	   
+    	static boolean orderThis(String bookN, String uss, int qtty) throws SQLException {
     		
     		try{
 	    		if ((bookN != null)&&(uss !=null)) {
@@ -395,7 +303,7 @@ import javax.swing.UnsupportedLookAndFeelException;
 			return false; //the name was not found
 		}
 			
-    	public boolean reduceQtty(int qtty, String bookN) throws SQLException {
+    	public static boolean reduceQtty(int qtty, String bookN) throws SQLException {
     		try{
 	    		int newQtty = qtty-1;
 	    		
@@ -417,17 +325,6 @@ import javax.swing.UnsupportedLookAndFeelException;
 			return false;
     	}
 			
-		public JPanel adminPanel(String uss) { {
-    		adminPanel = new JPanel();
-    		adminPanel.setLayout(new BoxLayout(adminPanel, BoxLayout.Y_AXIS));
-    		adminPanel.add(new JLabel("Welcome " + uss + " to your Administration PANEL"));
-	        JButton button = new JButton("Quit");
-	        button.addActionListener(this);
-	        adminPanel.add(button);
-	      }
-	   	return adminPanel; 
-	   }
-
 	    public static void main (String[] args) throws IOException {
 	     
 	        frame = new Demo();
