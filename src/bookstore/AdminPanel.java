@@ -12,41 +12,42 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 public class AdminPanel {
-	
-	static JPanel customerPanel,cardDisplay, adminPanel;
+
+	static JPanel customerPanel, cardDisplay, adminPanel;
 	static JButton quit, next;
 	static ResultSet rs;
 	static java.sql.Connection con;
 	JFrame frame;
-	
+
 	public AdminPanel(String s, JFrame frame) {
-		adminPanel = adminPanel(s, frame); 
+		adminPanel = adminPanel(s, frame);
 	}
-	
-	public static JPanel adminPanel(String uss,JFrame frame) { {
-		adminPanel = new JPanel();
-		adminPanel.setLayout(new BoxLayout(adminPanel, BoxLayout.Y_AXIS));
-		adminPanel.add(new JLabel("Welcome " + uss + " to your Administration PANEL"));
-        JButton button = new JButton("Quit");
-        
-        button.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-            	Demo.mainContainer.removeAll();
-				try {
-					Demo.mainContainer.add(Demo.mainPanel());
-				} catch (IOException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
+
+	public static JPanel adminPanel(String uss, JFrame frame) {
+		{
+			adminPanel = new JPanel();
+			adminPanel.setLayout(new BoxLayout(adminPanel, BoxLayout.Y_AXIS));
+			adminPanel.add(new JLabel("Welcome " + uss + " to your Administration PANEL"));
+			JButton button = new JButton("Quit");
+
+			button.addActionListener(new ActionListener() {
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					Demo.mainContainer.removeAll();
+					try {
+						Demo.mainContainer.add(MainPanel.mainPanel(frame));
+					} catch (IOException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
+					Demo.mainContainer.validate();
+
 				}
-				Demo.mainContainer.validate();
-            	
-            }});
-        
-        adminPanel.add(button);
-      }
-   	return adminPanel; 
-   }
-	
+			});
+
+			adminPanel.add(button);
+		}
+		return adminPanel;
+	}
 
 }
