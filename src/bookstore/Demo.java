@@ -1,28 +1,18 @@
 package bookstore;
 import java.awt.BorderLayout;
-import java.awt.CardLayout;
-import java.awt.Color;
 import java.awt.Container;
 import java.awt.Font;
-import java.awt.Graphics;
-import java.awt.HeadlessException;
-import java.awt.Image;
-import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
-
 import javax.imageio.ImageIO;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
-import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -71,7 +61,7 @@ import javax.swing.UnsupportedLookAndFeelException;
 			setSize(500,500);
 			setLocation(250,150);
 	    }
-	   
+	   //KEEP IN DEMO
 	    public static JOptionPane registerPane () {
 	    	   
   	      JTextField userField = new JTextField(15);
@@ -93,7 +83,7 @@ import javax.swing.UnsupportedLookAndFeelException;
   	          pass = passField.getText();
   	         
   	          try {
-					if(register(user,pass)){
+					if(DataBaseLogin.register(user,pass)){
 						JOptionPane.showMessageDialog(mainPanel, "Registered, Please login now. ");
 						
 					}
@@ -108,32 +98,7 @@ import javax.swing.UnsupportedLookAndFeelException;
   	   }
 			return null;
   	}
-	    
-	    public static boolean register(String userName, String password) throws SQLException {
-    		try{
-	    		if ((userName != null)&&(password !=null)) {
-	    			
-		    			Class.forName("com.mysql.jdbc.Driver");
-		    		   con = DriverManager.getConnection ("jdbc:mysql://127.0.0.1:3306/bookstore","root","Password1");
-		    		   Statement stmt = con.createStatement();
-		    		   stmt.executeUpdate("insert into users (name, pass) values (\"" + userName + "\",\"" + password + "\");" );
-		    				    		   
-		    		   return true;		    		   
-		    		}	    			
-    		}
-    		catch (SQLException e) {
-    			 e.printStackTrace();
-     		}
-     		catch (Exception e) {
-     		    e.printStackTrace();
-     		}
-     		finally {
-     		   con.close();
-     		}
-
-			return false; //the name was not found
-		}
-	    
+	    //KEEP IN DEMO
 	    public static JOptionPane loginPane () throws IOException {
     	   
     	      JTextField userField = new JTextField(15);
@@ -155,7 +120,7 @@ import javax.swing.UnsupportedLookAndFeelException;
     	          pass = passField.getText();
     	         
     	          try {
-					loginDbCheck(user,pass);
+					DataBaseLogin.loginDbCheck(user,pass);
 				} catch (SQLException e) {
 					
 					e.printStackTrace();
@@ -163,60 +128,8 @@ import javax.swing.UnsupportedLookAndFeelException;
     	   }
 			return null;
     	}
-    	
-    	public static boolean checkLogin(String userName, String password) throws SQLException {
-    		try{
-	    		if (userName != null) {
-	    			
-	    			Class.forName("com.mysql.jdbc.Driver");
-	    		   con = DriverManager.getConnection ("jdbc:mysql://127.0.0.1:3306/bookstore","root","Password1");
-	    		   Statement stmt = con.createStatement();
-	    		   ResultSet userN = stmt.executeQuery("select name,pass,admin from users");
-	    		  
-	    		   while (userN.next())
-		    			   
-	    		   if(userName.equals(userN.getString("name")) && password.equals(userN.getString("pass"))) {
-	    			   
-	    			   if(!userN.getBoolean("admin")){
-	  	    			 isAdmin = false;
-	  	    		   }
-	    			   return true;
-	    		   }
-	    		}
-    		}
-    		catch (SQLException e) {
-    			 e.printStackTrace();
-     		}
-     		catch (Exception e) {
-     		    e.printStackTrace();
-     		}
-     		finally {
-     		   con.close();
-     		}
-
-			return false; //the name was not found
-		}
-    	
-    	private static void loginDbCheck(String uss, String paw) throws SQLException, IOException {
-	    	if(checkLogin(uss,paw)) {
-				if(isAdmin){
-					mainContainer.removeAll();
-					mainContainer.add(AdminPanel.adminPanel(uss,null));
-					frame.validate();
-				}
-				else{
-					mainContainer.removeAll();
-					//mainContainer.add(customerPanel(uss));
-					mainContainer.add(CustomerPanel.customerPanel(uss, null));
-					frame.validate();
-				}
-			}
-			else {
-				JOptionPane.showMessageDialog(mainPanel, "Incorrect Details, Please Try Again");
-			}
-	    }
-	    
-    	public static JPanel mainPanel() throws IOException{
+    	//KEEP IN DEMO
+	    public static JPanel mainPanel() throws IOException{
     		
     		isAdmin = true;
     		JPanel header = new JPanel();
@@ -276,56 +189,8 @@ import javax.swing.UnsupportedLookAndFeelException;
 			return mainPanel;
     		
     	}
-	   
-    	static boolean orderThis(String bookN, String uss, int qtty) throws SQLException {
-    		
-    		try{
-	    		if ((bookN != null)&&(uss !=null)) {
-	    			
-		    			Class.forName("com.mysql.jdbc.Driver");
-		    		   con = DriverManager.getConnection ("jdbc:mysql://127.0.0.1:3306/bookstore","root","Password1");
-		    		   Statement stmt = con.createStatement();
-		    		   stmt.executeUpdate("insert into orders (bookName, cust) values (\"" + bookN + "\",\"" + uss + "\");" );
-		    				    		   
-		    		   return true;		    		   
-		    		}	    			
-    		}
-    		catch (SQLException e) {
-    			 e.printStackTrace();
-     		}
-     		catch (Exception e) {
-     		    e.printStackTrace();
-     		}
-     		finally {
-     		   con.close();
-     		}
-
-			return false; //the name was not found
-		}
-			
-    	public static boolean reduceQtty(int qtty, String bookN) throws SQLException {
-    		try{
-	    		int newQtty = qtty-1;
-	    		
-		    			Class.forName("com.mysql.jdbc.Driver");
-		    		   con = DriverManager.getConnection ("jdbc:mysql://127.0.0.1:3306/bookstore","root","Password1");
-		    		   Statement stmt = con.createStatement();
-		    		   stmt.executeUpdate("update stock set qty =\""+newQtty+"\""+ " where bookname = \""+bookN+"\";");
-		    		   return true;
-		    }
-    		catch (SQLException e) {
-    			 e.printStackTrace();
-     		}
-     		catch (Exception e) {
-     		    e.printStackTrace();
-     		}
-     		finally {
-     		   con.close();
-     		}
-			return false;
-    	}
-			
-	    public static void main (String[] args) throws IOException {
+	    //KEEP IN DEMO
+    	public static void main (String[] args) throws IOException {
 	     
 	        frame = new Demo();
 	        

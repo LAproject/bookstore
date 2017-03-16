@@ -43,7 +43,6 @@ public class CustomerPanel {
 		} 
 	}
 
-	
 	public static JPanel customerPanel(String uss, JFrame frame) throws IOException { {
 		
 		quit = new JButton("Quit");
@@ -97,7 +96,7 @@ public class CustomerPanel {
     		            public void actionPerformed(ActionEvent e) {
 	    		            if(qtty>0){	
 	    		                try {
-									if (Demo.orderThis(bookN, uss, qtty) && Demo.reduceQtty(qtty, bookN)) {
+									if (DataBaseOrder.orderThis(bookN, uss, qtty) && DataBaseReduce.reduceQtty(qtty, bookN)) {
 										
 										Demo.mainContainer.removeAll();
 										try {
@@ -127,7 +126,6 @@ public class CustomerPanel {
     			   
     			   BufferedImage img = ImageIO.read(new File("/Users/arturwac/Desktop/advanced/bookstore/src/"+image+".png"));
     			    
-    			   
     			   card.add(new JLabel(bookName));
     			   card.add(new JLabel(author));
     			   card.add(new JLabel(description));
