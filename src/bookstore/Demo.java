@@ -73,7 +73,7 @@ public class Demo extends JFrame {
 			pass = passField.getText();
 
 			try {
-				if (DataBaseLogin.register(user, pass)) {
+				if (DataBaseRegister.register(user, pass)) {
 					JOptionPane.showMessageDialog(mainPanel, "Registered, Please login now. ");
 
 				} else {

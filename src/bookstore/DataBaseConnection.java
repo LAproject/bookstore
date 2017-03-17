@@ -18,8 +18,6 @@ public class DataBaseConnection {
 			connection = DriverManager.getConnection("jdbc:mysql://127.0.0.1:3306/bookstore", "root", "Password1");
 			stat = connection.createStatement();
 
-			
-
 		} catch (ClassNotFoundException | SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -28,20 +26,17 @@ public class DataBaseConnection {
 		return stat;
 
 	}
-	
-	public static void closeMe(){
-		
+
+	public static void closeMe() {
+
 		try {
 			connection.close();
-			
+
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
-		
+
 	}
 
 }
-
-

@@ -4,33 +4,11 @@ import java.io.IOException;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-
 import javax.swing.JOptionPane;
 
 public class DataBaseLogin {
 
 	static Statement stmt;
-
-	public static boolean register(String userName, String password) throws SQLException {
-
-		try {
-			if ((userName != null) && (password != null)) {
-
-				stmt = DataBaseConnection.connectMe();
-				stmt.executeUpdate("insert into users (name, pass) values (\"" + userName + "\",\"" + password + "\");");
-
-				return true; // name was found
-			}
-		} catch (SQLException e) {
-			e.printStackTrace();
-		} catch (Exception e) {
-			e.printStackTrace();
-		} finally {
-			DataBaseConnection.closeMe();
-		}
-
-		return false; // name was not found
-	}
 
 	public static boolean checkLogin(String userName, String password) throws SQLException {
 		try {
