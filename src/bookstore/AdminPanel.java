@@ -11,6 +11,11 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
+/**
+ * 
+ * @author ARTE & LEE This Class is designed for building Administration Panel
+ *         with administrative options
+ */
 public class AdminPanel {
 
 	static JPanel customerPanel, cardDisplay, adminPanel;
@@ -19,10 +24,25 @@ public class AdminPanel {
 	static java.sql.Connection con;
 	JFrame frame;
 
+	/**
+	 * Constructor passing:
+	 * 
+	 * @param s
+	 *            : name of the user
+	 * @param frame
+	 *            : frame/panel
+	 */
 	public AdminPanel(String s, JFrame frame) {
 		adminPanel = adminPanel(s, frame);
 	}
 
+	/**
+	 * Method that builds actual panel
+	 * 
+	 * @param uss
+	 * @param frame
+	 * @return
+	 */
 	public static JPanel adminPanel(String uss, JFrame frame) {
 		{
 			adminPanel = new JPanel();

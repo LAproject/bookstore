@@ -15,6 +15,12 @@ import javax.swing.JTextField;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 
+/**
+ * MAIN CLASS with MAIN METHOD
+ * 
+ * @author ARTE & LEE
+ *
+ */
 public class Demo extends JFrame {
 
 	static JFrame frame;
@@ -28,6 +34,11 @@ public class Demo extends JFrame {
 	static Connection con = null;
 	static Container mainContainer;
 
+	/**
+	 * Constructor
+	 * 
+	 * @throws IOException
+	 */
 	public Demo() throws IOException {
 		mainContainer = getContentPane();
 		panel = MainPanel.mainPanel(frame);
@@ -53,6 +64,11 @@ public class Demo extends JFrame {
 		setLocation(250, 150);
 	}
 
+	/**
+	 * Registration pop up window
+	 * 
+	 * @return
+	 */
 	public static JOptionPane registerPane() {
 
 		JTextField userField = new JTextField(15);
@@ -88,6 +104,12 @@ public class Demo extends JFrame {
 		return null;
 	}
 
+	/**
+	 * Login PopUP window
+	 * 
+	 * @return
+	 * @throws IOException
+	 */
 	public static JOptionPane loginPane() throws IOException {
 
 		JTextField userField = new JTextField(15);
@@ -117,6 +139,12 @@ public class Demo extends JFrame {
 		return null;
 	}
 
+	/**
+	 * main method
+	 * 
+	 * @param args
+	 * @throws IOException
+	 */
 	public static void main(String[] args) throws IOException {
 
 		frame = new Demo();

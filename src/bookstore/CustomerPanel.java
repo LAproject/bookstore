@@ -23,6 +23,12 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
+/**
+ * 
+ * @author ARTE & LEE This Class is designed for building Customer Panel with
+ *         customer options
+ */
+
 public class CustomerPanel {
 
 	static JPanel customerPanel;
@@ -32,6 +38,12 @@ public class CustomerPanel {
 	static java.sql.Connection con;
 	JFrame frame;
 
+	/**
+	 * Constructor with frame and user name parameters
+	 * 
+	 * @param s
+	 * @param frame
+	 */
 	public CustomerPanel(String s, JFrame frame) {
 		// TODO Auto-generated constructor stub
 		try {
@@ -42,6 +54,15 @@ public class CustomerPanel {
 		}
 	}
 
+	/**
+	 * Actual method for customer panel | allows user to flip trough the cards |
+	 * informations on the cards are taken from DB
+	 * 
+	 * @param uss
+	 * @param frame
+	 * @return full panel and internal cards
+	 * @throws IOException
+	 */
 	public static JPanel customerPanel(String uss, JFrame frame) throws IOException {
 		{
 
@@ -94,6 +115,7 @@ public class CustomerPanel {
 							public void actionPerformed(ActionEvent e) {
 								if (qtty > 0) {
 									try {
+
 										if (DataBaseOrder.orderThis(bookN, uss, qtty)
 												&& DataBaseReduce.reduceQtty(qtty, bookN)) {
 
@@ -113,6 +135,7 @@ public class CustomerPanel {
 											JOptionPane.showMessageDialog(card,
 													"There was a problem with order, Please contact shop");
 										}
+
 									} catch (HeadlessException e1) {
 										// TODO Auto-generated catch block
 										e1.printStackTrace();
@@ -120,13 +143,18 @@ public class CustomerPanel {
 										// TODO Auto-generated catch block
 										e1.printStackTrace();
 									}
+								} else {
+
+									JOptionPane.showMessageDialog(CustomerPanel.customerPanel,
+											"Quantitty is null, Item can not be ordered");
+
 								}
+
 							}
 
 						});
 
-						BufferedImage img = ImageIO
-								.read(new File("/Users/arturwac/Desktop/advanced/bookstore/src/" + image + ".png"));
+						BufferedImage img = ImageIO.read(new File("../bookstore/src/" + image + ".png"));
 
 						card.add(new JLabel(bookName));
 						card.add(new JLabel(author));

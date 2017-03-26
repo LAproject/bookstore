@@ -16,7 +16,11 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-
+/**
+ * Main panel | Application front/first navigation window | 
+ * @author ARTE
+ *
+ */
 public class MainPanel {
 
 	static boolean isAdmin;
@@ -27,6 +31,10 @@ public class MainPanel {
 	static java.sql.Connection con;
 	JFrame frame;
 
+	/**
+	 * Constructor | passes frame to main method in Demo
+	 * @param frame
+	 */
 	public MainPanel(JFrame frame) {
 		// TODO Auto-generated constructor stub
 		try {
@@ -37,6 +45,12 @@ public class MainPanel {
 		}
 	}
 
+	/**
+	 * Method that constructs actual main panel 
+	 * @param frame
+	 * @return
+	 * @throws IOException
+	 */
 	public static JPanel mainPanel(JFrame frame) throws IOException {
 
 		isAdmin = true;
